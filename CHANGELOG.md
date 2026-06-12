@@ -3,29 +3,28 @@
 ## 2026-06-12
 
 - New `/pdf-cv` page (linked from the header next to "Markdown CV"): without
-  `?id` it creates a CV from an uploaded PDF, with the name pre-filled from
-  the filename and editable before creating; with `?id=<mdcv_id>` it manages
-  an existing CV's PDF (replace file, rename, remove PDF to revert to
-  markdown).
-- Dashboard: "Edit" is now representation-aware — markdown CVs open the
-  markdown editor, PDF CVs open `/pdf-cv?id=...`; the "New CV from PDF" button
-  navigates to the new page instead of an inline picker.
-- Dashboard: the Published/Default switches carry small captions ("public
-  link works / is off", "shown at /username") so their effect is visible
-  without hovering.
+  `?id` it creates a CV from an uploaded PDF, with the name pre-filled from the
+  filename and editable before creating; with `?id=<mdcv_id>` it manages an
+  existing CV's PDF (replace file, rename, remove PDF to revert to markdown).
+- Dashboard: "Edit" is now representation-aware — markdown CVs open the markdown
+  editor, PDF CVs open `/pdf-cv?id=...`; the "New CV from PDF" button navigates
+  to the new page instead of an inline picker.
+- Dashboard: the Published/Default switches carry small captions ("public link
+  works / is off", "shown at /username") so their effect is visible without
+  hovering.
 - `PUT /v1/mdcv/:mdcv_id` with a new `name` now also updates the public slug
   (`as_regulary_by_name_username`) for named CVs, so renaming moves the link
   instead of leaving it on the old name.
 
 - Dashboard: replace the bare Published/Default checkboxes with PrimeVue
-  ToggleSwitch controls (Aura theme); each flip now asks for confirmation via
-  an anchored ConfirmPopup before the request is sent, and the rows carry
-  tooltips explaining what each switch does. `ConfirmationService` is now
-  registered in `src/main.ts`.
-- Dashboard: add "New CV from PDF" button — creates a CV record (empty
-  markdown) and uploads the file in one flow, so a PDF-only CV no longer
-  requires going through the markdown editor first. No backend change:
-  `POST /v1/mdcv` + `PUT /v1/mdcv/:id/pdf`.
+  ToggleSwitch controls (Aura theme); each flip now asks for confirmation via an
+  anchored ConfirmPopup before the request is sent, and the rows carry tooltips
+  explaining what each switch does. `ConfirmationService` is now registered in
+  `src/main.ts`.
+- Dashboard: add "New CV from PDF" button — creates a CV record (empty markdown)
+  and uploads the file in one flow, so a PDF-only CV no longer requires going
+  through the markdown editor first. No backend change: `POST /v1/mdcv` +
+  `PUT /v1/mdcv/:id/pdf`.
 - Dashboard: per-row Upload/Replace PDF is now a proper button (was an
   underlined text link, easy to miss); all PDF controls share one hidden file
   picker and disable while an upload is in flight.

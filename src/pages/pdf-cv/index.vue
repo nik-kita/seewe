@@ -157,10 +157,12 @@ const remove_pdf = async () => {
       Managing CV
       <strong>{{ existing.name || `#${existing._id}` }}</strong> — currently
       served as
-      <strong>{{ (existing.kind ?? "md") === "pdf" ? "PDF" : "markdown" }}</strong>.
-      <span v-if="(existing.kind ?? 'md') === 'md'">
-        Uploading a PDF here switches it to the PDF representation (the
-        markdown is kept).
+      <strong>{{
+        (existing.kind ?? "md") === "pdf" ? "PDF" : "markdown"
+      }}</strong>.
+      <span v-if='(existing.kind ?? "md") === "md"'>
+        Uploading a PDF here switches it to the PDF representation (the markdown
+        is kept).
       </span>
     </div>
     <p v-else :class='tw("text-sm text-gray-600")'>
@@ -224,7 +226,7 @@ const remove_pdf = async () => {
         label="Back to dashboard"
         severity="secondary"
         text
-        @click="() => router.push('/dashboard')"
+        @click='() => router.push("/dashboard")'
       />
     </div>
   </div>

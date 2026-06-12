@@ -172,7 +172,7 @@ const toggle_default = async (cv: (typeof mdcvs.value)[number]) => {
   />
 
   <div :class='tw("mb-4")'>
-    <t-btn @click="() => router.push('/pdf-cv')">New CV from PDF</t-btn>
+    <t-btn @click='() => router.push("/pdf-cv")'>New CV from PDF</t-btn>
   </div>
 
   <ol :class='tw("flex flex-col gap-4")'>
@@ -225,13 +225,14 @@ const toggle_default = async (cv: (typeof mdcvs.value)[number]) => {
         <div
           :class='tw("flex cursor-pointer items-center gap-2 text-sm")'
           title="Public CVs can be opened by anyone with the link"
-          @click="(e) => confirm_toggle(
+          @click='(e) =>
+          confirm_toggle(
             e,
             cv.is_published
-              ? 'Hide this CV? Its public link will stop working.'
-              : 'Publish this CV? Anyone with the link will be able to open it.',
+              ? "Hide this CV? Its public link will stop working."
+              : "Publish this CV? Anyone with the link will be able to open it.",
             async () => await toggle_published(cv),
-          )"
+          )'
         >
           <ToggleSwitch
             :model-value="cv.is_published"
@@ -249,13 +250,14 @@ const toggle_default = async (cv: (typeof mdcvs.value)[number]) => {
           v-if="auth.user?.nik"
           :class='tw("flex cursor-pointer items-center gap-2 text-sm")'
           title="The default CV is served from your plain username link"
-          @click="(e) => confirm_toggle(
+          @click='(e) =>
+          confirm_toggle(
             e,
             is_default(cv)
-              ? 'Remove default status from this CV?'
-              : 'Make this CV your default? It replaces the current default one.',
+              ? "Remove default status from this CV?"
+              : "Make this CV your default? It replaces the current default one.",
             async () => await toggle_default(cv),
-          )"
+          )'
         >
           <ToggleSwitch
             :model-value="is_default(cv)"
