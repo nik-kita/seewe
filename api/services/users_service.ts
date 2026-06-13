@@ -3,6 +3,7 @@ import { db } from "../db.ts"
 import { User, UserEntity } from "../dto/user.dto.ts"
 import { is_reserved_username } from "../utils/is_reserved_username.ts"
 import { normalize_username } from "../utils/normalize_username.ts"
+import { page_service } from "./page_service.ts"
 import { unique_incremental_timestamp } from "../utils/ui/utils/random.util.ts"
 
 const find_by = async <T extends ("_id" | "email" | "nik" | "nik_lc")>(
@@ -161,28 +162,9 @@ const update_nik = async (nik: string, user: UserEntity) => {
   })
 
   if (db_res.ok) {
-    void await Promise.all([
-      db._dev_md_cv.updateMany({
-        as_default_by_username: nik,
-      }, {
-        filter: ({ value }) => {
-          return value.user_id === user._id &&
-            value.as_default_by_username === prev_nik
-        },
-      }),
-      db._dev_md_cv.updateMany({
-        as_regulary_by_name_username: [nik],
-      }, {
-        filter: ({ value }) => {
-          return value.user_id === user._id &&
-            value.as_regulary_by_name_username?.[0] === prev_nik
-        },
-        strategy: "merge",
-        mergeOptions: {
-          arrays: "merge",
-        },
-      }),
-    ])
+    // cutover: pages live in `_dev_page` now — cascade the rename there so every
+    // page's link + display label follows the new nik (purges the user tag).
+    await page_service.cascade_user_rename(user, nik)
 
     return {
       ok: true,

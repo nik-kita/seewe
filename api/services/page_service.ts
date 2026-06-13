@@ -197,6 +197,36 @@ const rename = async (page_id: number, user: UserEntity, new_name: string) => {
   return ok(null)
 }
 
+// On a nik rename every page the user owns is still keyed by the OLD username.
+// Rebuild the lowercased routing keys + the raw `display_username` so the new link
+// resolves, then purge the user's cache tag. Default and named pages key on
+// different indices, so each is rebuilt on its own.
+const cascade_user_rename = async (user: UserEntity, new_nik: string) => {
+  const new_lc = normalize_username(new_nik)
+
+  // the single default page (if any): routed by `default_by_username`.
+  await db._dev_page.updateByPrimaryIndex("default_by_user_id", user._id, {
+    default_by_username: new_lc,
+    display_username: new_nik,
+  })
+
+  // named pages: each keeps its own name, so rebuild [user, name] per record.
+  const { result } = await db._dev_page.findBySecondaryIndex("user_id", user._id)
+  await Promise.all(
+    result
+      .filter((r) => r.value.by_username_and_name)
+      .map((r) =>
+        db._dev_page.updateByPrimaryIndex("_id", r.value._id!, {
+          display_username: new_nik,
+          by_username_and_name: [new_lc, r.value.by_username_and_name![1]!],
+        }, { mergeOptions: { arrays: "replace" } })
+      ),
+  )
+
+  await purge_user(user._id)
+  return ok(null)
+}
+
 const remove = async (page_id: number, user: UserEntity) => {
   await db._dev_page.deleteByPrimaryIndex("_id", page_id)
   await db._dev_page_pdf.deleteByPrimaryIndex("page_id", page_id)
@@ -225,6 +255,7 @@ export const page_service = {
   save_as_default,
   update,
   rename,
+  cascade_user_rename,
   remove,
   toggle_default,
   set_pdf,

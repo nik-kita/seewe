@@ -2,6 +2,13 @@
 
 ## 2026-06-13
 
+- Cutover to the `page` domain: public serving is now `page_subserver` (reads
+  `_dev_page`), replacing `spa_subserver` in `api/mod.ts`. On a nik rename,
+  `users_service.update_nik` now cascades to `_dev_page` via
+  `page_service.cascade_user_rename` — rebuilds each page's lowercased routing
+  key + raw `display_username` and purges the user's CDN cache tag (replaces the
+  old `_dev_md_cv` cascade).
+
 - Reserve usernames: a user can no longer take a `nik` that collides with the
   site's own routes, infra/role/brand names, or offensive words. Added
   `api/dev/gen_reserved_usernames.ts` (generates a committed
