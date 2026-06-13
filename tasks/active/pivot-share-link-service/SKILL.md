@@ -42,10 +42,11 @@ reserved-usernames guard [[014.log]]; slice 3 `page_service` [[015.log]]
 (save/default/named/pdf, 12/12 smoke); 4a render machine [[016.log]] [[017.log]];
 4c MACHINE rebuilt as the page-serving machine `serving_machine.ts` ([[018.log]],
 14 tests) — owns resolve -> canonical display/lc redirect ->
-render(artifact|site|degrade)|fallback, IO injected. CURRENT: 4c handler
-(`page_subserver`: build ServeInput per route + ServeDecision->Response +
-not-found nuances + `.pdf` suffix) + 4d CDN cache headers + 4b user nik
-lc/display split (handler prereq).
+render(artifact|site|degrade)|fallback, IO injected; 4b user nik lc/display split
+[[019.log]] (`normalize_username`, `nik_lc` index, `find_by_nik_lc`, lc
+uniqueness; 10/10 smoke). CURRENT: 4c handler (`page_subserver`: build ServeInput
+per route via find_by_nik_lc + lc page indices, ServeDecision->Response,
+not-found nuances, `.pdf` suffix) + 4d CDN cache headers.
 Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
 CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
 cache-tag layer locked, no fallback branch.
