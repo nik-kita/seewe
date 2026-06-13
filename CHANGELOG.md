@@ -22,6 +22,12 @@
   of the CV service, writing `_dev_page` with the new identity model — lowercased
   routing keys plus raw-case `display_username`/`display_name`. Not wired to
   routes yet.
+- Usernames are now case-insensitive and case-preserving (share-link rebrand):
+  a `nik` is stored raw for display plus a lowercased `nik_lc` index, so `Alice`
+  and `alice` can no longer both be registered and a username resolves regardless
+  of casing. Added `normalize_username`, `nik_lc` to the user record/index, and
+  `users_service.find_by_nik_lc`; `add_nik`/`update_nik` enforce uniqueness on the
+  lowercased form.
 - Begin the share-link rebrand (`mdcv` -> `page`): add `api/dto/page.dto.ts` and
   the `_dev_page` / `_dev_page_pdf` kvdex collections, alongside the existing
   `_dev_md_cv*` (migrated + dropped at cutover). The page record drops the

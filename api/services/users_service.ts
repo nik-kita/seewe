@@ -2,14 +2,15 @@
 import { db } from "../db.ts"
 import { User, UserEntity } from "../dto/user.dto.ts"
 import { is_reserved_username } from "../utils/is_reserved_username.ts"
+import { normalize_username } from "../utils/normalize_username.ts"
 import { unique_incremental_timestamp } from "../utils/ui/utils/random.util.ts"
 
-const find_by = async <T extends ("_id" | "email" | "nik")>(
+const find_by = async <T extends ("_id" | "email" | "nik" | "nik_lc")>(
   by: T,
   value: T extends "_id" ? number : string,
 ) => {
   const find_result = await db._dev_users.findByPrimaryIndex(
-    ...([by, value] as ["email" | "nik", string]),
+    ...([by, value] as ["email" | "nik" | "nik_lc", string]),
   )
 
   if (!find_result?.id) {
@@ -94,7 +95,9 @@ const add_nik = async (nik: string, user: UserEntity) => {
     } as const
   }
 
-  const already = await db._dev_users.findByPrimaryIndex("nik", nik)
+  // uniqueness on the lowercased key, so "Alice" and "alice" can't both exist.
+  const nik_lc = normalize_username(nik)
+  const already = await db._dev_users.findByPrimaryIndex("nik_lc", nik_lc)
 
   if (already?.value) {
     return {
@@ -105,6 +108,7 @@ const add_nik = async (nik: string, user: UserEntity) => {
 
   const db_res = await db._dev_users.updateByPrimaryIndex("_id", user._id, {
     nik,
+    nik_lc,
   })
 
   if (db_res.ok) {
@@ -141,7 +145,8 @@ const update_nik = async (nik: string, user: UserEntity) => {
     } as const
   }
 
-  const already = await db._dev_users.findByPrimaryIndex("nik", nik)
+  const nik_lc = normalize_username(nik)
+  const already = await db._dev_users.findByPrimaryIndex("nik_lc", nik_lc)
 
   if (already?.value) {
     return {
@@ -152,6 +157,7 @@ const update_nik = async (nik: string, user: UserEntity) => {
 
   const db_res = await db._dev_users.updateByPrimaryIndex("_id", user._id, {
     nik,
+    nik_lc,
   })
 
   if (db_res.ok) {
@@ -194,6 +200,8 @@ export const users_service = {
   add_nik,
   update_nik,
   find_by_nik: (nik: string) => find_by("nik", nik),
+  // case-insensitive lookup for the new page domain (lowercases before matching).
+  find_by_nik_lc: (nik: string) => find_by("nik_lc", normalize_username(nik)),
   find_by_id: (_id: number) => find_by("_id", _id),
   find_by_email: (email: string) => find_by("email", email),
   insert,

@@ -25,7 +25,10 @@ export const db = kvdex(kv, {
     indices: {
       email: "primary",
       _id: "primary",
+      // `nik` (raw) stays indexed for the still-running old domain; `nik_lc`
+      // (lowercased) is the new case-insensitive lookup + uniqueness key.
       nik: "primary",
+      nik_lc: "primary",
     },
   }),
   _dev_md_cv: collection(MdCvDtoWithPossibilityToUpdateUsernameCvNamePair, {
