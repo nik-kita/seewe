@@ -52,9 +52,14 @@ artifact/site only; 18 tests). SLICE 4 COMPLETE. Slice 5 invalidate-on-write
 [[022.log]] — purge wired into all page_service mutations; slice 6 routers
 [[023.log]] — `/v1/page` (8 routes) mounted alongside `/v1/mdcv`, +
 page_service.rename/remove (fixed a kvdex array-merge slug-corruption bug). 22
-tests. CURRENT: slice 7 cutover — mount page_subserver (replace spa_subserver),
-nik-rename page cascade + purge_user, post-pivot schema photo, hand off to paused
-[[kv-restore-migrate]].
+tests. Slice 7 cutover CODE parts done [[024.log]]: mount swapped in mod.ts
+(page_subserver replaces spa_subserver; legacy spa_subserver/md-cv_service left
+in tree, dead on public path); nik-rename cascade moved off `_dev_md_cv` to
+`page_service.cascade_user_rename` (rebuilds default + named lc keys w/
+arrays:"replace", raw display_username, purge_user). check clean, 22/22 tests,
+10/10 cascade smoke. CURRENT: slice 7 OPS parts remain — (3) post-pivot schema
+photo vs remote KV (ACCESS_TOKEN), (4) hand off to paused [[kv-restore-migrate]]
+for the data move (until it runs, `_dev_page` is empty for existing records).
 Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
 CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
 cache-tag layer locked, no fallback branch.
