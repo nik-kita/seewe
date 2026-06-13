@@ -8,12 +8,16 @@
   `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
   curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
   (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
-- Add `api/spa_subserver/render_machine.ts` (share-link rebrand): an xstate
-  (`npm:xstate@5`) machine encoding the public-page render decision — serve the
-  uploaded artifact for a `pdf` page, else render markdown in the site layout,
-  with a degrade edge when a pdf blob is missing. Not wired to routes yet. Covered
-  by `render_machine.test.ts`; adds backend test tooling (`deno task test` /
-  `just test`, `@std/assert` pinned) — the api had none before.
+- Add `api/spa_subserver/serving_machine.ts` (share-link rebrand): an xstate
+  (`npm:xstate@5`) machine encoding the whole public-page serving decision —
+  resolve the link, redirect to the canonical display casing when the incoming
+  path differs, then serve the uploaded artifact for a `pdf` page or render
+  markdown in the site layout (with a degrade edge when a pdf blob is missing);
+  an unresolved link yields a `fallback` decision the handler turns into the
+  site. IO (lookup, pdf load) is injected so the machine stays pure. Not wired to
+  routes yet. Covered by `serving_machine.test.ts` (14 cases); adds backend test
+  tooling (`deno task test` / `just test`, `@std/assert` pinned) — the api had
+  none before.
 - Add `api/services/page_service.ts` (share-link rebrand): the `page` equivalent
   of the CV service, writing `_dev_page` with the new identity model — lowercased
   routing keys plus raw-case `display_username`/`display_name`. Not wired to
