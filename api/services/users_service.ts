@@ -1,6 +1,7 @@
 // deno-lint-ignore-file require-await
 import { db } from "../db.ts"
 import { User, UserEntity } from "../dto/user.dto.ts"
+import { is_reserved_username } from "../utils/is_reserved_username.ts"
 import { unique_incremental_timestamp } from "../utils/ui/utils/random.util.ts"
 
 const find_by = async <T extends ("_id" | "email" | "nik")>(
@@ -86,6 +87,13 @@ const add_nik = async (nik: string, user: UserEntity) => {
     } as const
   }
 
+  if (is_reserved_username(nik)) {
+    return {
+      ok: false,
+      data: "This nik is reserved",
+    } as const
+  }
+
   const already = await db._dev_users.findByPrimaryIndex("nik", nik)
 
   if (already?.value) {
@@ -123,6 +131,13 @@ const update_nik = async (nik: string, user: UserEntity) => {
     return {
       ok: false,
       data: "User should create nik and then update it",
+    } as const
+  }
+
+  if (is_reserved_username(nik)) {
+    return {
+      ok: false,
+      data: "This nik is reserved",
     } as const
   }
 

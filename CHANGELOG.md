@@ -2,6 +2,12 @@
 
 ## 2026-06-13
 
+- Reserve usernames: a user can no longer take a `nik` that collides with the
+  site's own routes, infra/role/brand names, or offensive words. Added
+  `api/dev/gen_reserved_usernames.ts` (generates a committed
+  `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
+  curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
+  (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
 - Begin the share-link rebrand (`mdcv` -> `page`): add `api/dto/page.dto.ts` and
   the `_dev_page` / `_dev_page_pdf` kvdex collections, alongside the existing
   `_dev_md_cv*` (migrated + dropped at cutover). The page record drops the
