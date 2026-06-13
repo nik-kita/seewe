@@ -24,9 +24,23 @@ Backup subtasks PAUSED (fully specified; do not resurface until resumed or all
 else done): [[kv-dump-script]] (data dump + pre-pivot schema photo, done),
 [[kv-restore-migrate]] (verbatim restore done; transform deferred).
 
-Next: design the simplified kvdex `page`/`user` schema from the query inventory
-(in [[006.decision]]), then execute the `mdcv -> page` rename. Open sub-decision
-(non-blocking): generalize `kind` beyond md/pdf.
+Concept locked [[008.analysis]] + memory [[seewe-core-link-concept]]: link =
+domain/username(/name), resolved first in ONE direct lc-index get; site is
+fallback. "Any sacrifice for that link."
+
+Design decided:
+- Link cache = Deno Deploy CDN + `Deno-Cache-Tag` (`page-<id>`, `user-<id>`),
+  global purge on write; `s-maxage` from `CACHE_S_MAXAGE` env, long default
+  ([[011.decision]], supersedes the regional Web-Cache [[010.decision]]).
+- Case handling: indexed lowercased `username`/`name` + raw `display_*`; canonical
+  302/307 redirect when incoming != display ([[010.decision]]).
+- Reserved usernames: generated Set (our slugs + Big Username Blacklist + LDNOOBW),
+  exact lc match in nik create/update.
+
+Build order in [[012.plan]]. CURRENT slice: (1) `page` schema — `dto/page.dto.ts`
++ `_dev_page`/`_dev_page_pdf` collections alongside the old ones.
+Open sub-decision (non-blocking): generalize `kind` beyond md/pdf. To confirm:
+seewe.deno.dev is on CURRENT Deploy (CDN tags), not Classic.
 
 Carry-over to preserve in the rename:
 - The render-decision logic in `render_cv` (api/spa_subserver/spa_subserver.tsx)
