@@ -46,10 +46,12 @@ render(artifact|site|degrade)|fallback, IO injected; 4b user nik lc/display spli
 [[019.log]] (`normalize_username`, `nik_lc` index, `find_by_nik_lc`, lc
 uniqueness; 10/10 smoke); 4c handler `page_subserver.tsx` [[020.log]] (3 routes ->
 serving_machine, ServeDecision->Response, not-found nuances; 12/12 integration
-smoke; NOT mounted yet). CURRENT: 4d CDN cache headers
-(`Deno-CDN-Cache-Control` s-maxage + `Deno-Cache-Tag` page-/user-) on
-artifact/site responses. Then slice 5 (invalidate-on-write), 6 (routers), 7
-(cutover).
+smoke; NOT mounted yet); 4d CDN cache headers `page_cache.ts` [[021.log]]
+(`Deno-CDN-Cache-Control` s-maxage env + `Deno-Cache-Tag` page-/user- on
+artifact/site only; 18 tests). SLICE 4 COMPLETE. CURRENT: slice 5
+invalidate-on-write (purge page-/user- tags via cache.localhost from every
+mutation), then 6 routers (/v1/page), 7 cutover (mount + post-pivot photo +
+hand off to paused migration).
 Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
 CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
 cache-tag layer locked, no fallback branch.
