@@ -1,3 +1,174 @@
 export default `
-# Evan You\n\n<img src="https://avatars.githubusercontent.com/u/499550" width="100px"/>\n\n## Contact Information\n- **Email:** youyuxi@gmail.com\n- **Twitter:** [@youyuxi](https://twitter.com/youyuxi)\n- **GitHub:** [yyx990803](https://github.com/yyx990803)\n- **Website:** [evanyou.me](https://evanyou.me)\n\n---\n\n## Professional Profile\nEvan You is a renowned software engineer best known for creating Vue.js, a progressive JavaScript framework for building user interfaces. With a keen eye for design and a passion for developer experience, Evan has significantly impacted the frontend development community. He is dedicated to creating tools that are both powerful and easy to use, promoting best practices and innovation in web development.\n\n---\n\n## Career Highlights\n\n### Creator of Vue.js\n- **Organization:** Self-initiated open-source project\n- **Duration:** Feb 2014 – Present\n- **Key Contributions:**\n  - Developed and maintained Vue.js, a widely adopted JavaScript framework.\n  - Grew the Vue.js ecosystem to include official tools like Vue Router, Vuex, and Vue CLI.\n  - Built a strong, supportive community around Vue.js through documentation, tutorials, and community events.\n  - Continually evolved the framework to incorporate modern web development practices and improve performance.\n\n### Independent Open Source Developer\n- **Duration:** Jan 2016 – Present\n- **Key Projects:**\n  - **Vite:** A next-generation frontend tooling, which significantly improves the development experience with rapid hot module replacement (HMR) and optimized build process.\n  - **Vue CLI:** A powerful CLI tool for scaffolding and managing Vue.js projects.\n\n### Senior Frontend Engineer | Meteor Development Group\n- **Duration:** Jan 2015 – Dec 2015\n- **Key Contributions:**\n  - Worked on various core features of the Meteor framework.\n  - Focused on enhancing the frontend development experience.\n  - Collaborated with the open-source community to integrate Vue.js with Meteor.\n\n### Creative Technologist | Google Creative Lab\n- **Duration:** Jun 2013 – Dec 2014\n- **Key Contributions:**\n  - Developed innovative web experiences and prototypes.\n  - Utilized cutting-edge web technologies to create interactive projects.\n  - Collaborated with designers and developers to push the boundaries of web development.\n\n---\n\n## Skills and Expertise\n\n### Technical Skills\n- **JavaScript:** Expert\n- **TypeScript:** Advanced\n- **HTML:** Advanced\n- **CSS:** Advanced\n\n### Frameworks and Libraries\n- **Vue.js:** Creator and Expert\n- **React:** Intermediate\n- **Angular:** Intermediate\n- **Webpack:** Advanced\n- **Rollup:** Advanced\n\n### Tools and Platforms\n- **Vite:** Creator and Expert\n- **Vue CLI:** Expert\n- **Git:** Expert\n- **Jest:** Advanced\n- **Cypress:** Intermediate\n- **Docker:** Intermediate\n\n### Other Competencies\n- **Frontend Architecture:** Expert\n- **Component Design:** Expert\n- **Performance Optimization:** Advanced\n- **Testing:** Advanced\n- **User Experience (UX) Design:** Advanced\n- **Public Speaking:** Expert\n\n---\n\n## Education\n\n### Master of Fine Arts in Design & Technology\n- **Institution:** Parsons School of Design\n- **Graduation Year:** 2013\n\n### Bachelor of Science in Computer Science\n- **Institution:** Shanghai Jiao Tong University\n- **Graduation Year:** 2010\n\n---\n\n## Open Source Contributions\n\n### Vue.js\n- **Repository:** [github.com/vuejs/vue](https://github.com/vuejs/vue)\n- **Description:** Progressive JavaScript framework for building user interfaces.\n- **Key Achievements:**\n  - Over 200,000 GitHub stars.\n  - Widely adopted by developers and companies worldwide.\n  - Extensive ecosystem with robust tooling and plugins.\n\n### Vite\n- **Repository:** [github.com/vitejs/vite](https://github.com/vitejs/vite)\n- **Description:** Next-generation frontend tooling for rapid development.\n- **Key Achievements:**\n  - Significant improvements in development and build performance.\n  - Adoption by many large-scale projects and frameworks.\n\n### Vue CLI\n- **Repository:** [github.com/vuejs/vue-cli](https://github.com/vuejs/vue-cli)\n- **Description:** Standard tooling for Vue.js development.\n- **Key Achievements:**\n  - Simplified project setup and management.\n  - Integrated modern web development best practices.\n\n---\n\n## Speaking Engagements\n\n### Conferences\n- **VueConf:** Regular keynote speaker and session presenter on Vue.js ecosystem and best practices.\n- **JSConf:** Presenter on innovative frontend development techniques and tools.\n- **Frontend Connect:** Speaker on modern JavaScript frameworks and development workflows.\n\n### Workshops and Tutorials\n- Conducts workshops on Vue.js, Vite, and modern frontend development practices.\n- Provides online tutorials and courses to help developers learn Vue.js and related technologies.\n\n---\n\n## Publications\n\n### Articles and Blog Posts\n- **Personal Blog:** [evanyou.me](https://evanyou.me)\n  - Regularly publishes articles on Vue.js, frontend development, and open-source software.\n- **Contributions:** Published articles on prominent platforms like Smashing Magazine and CSS-Tricks.\n\n### Books\n- **"Fullstack Vue: The Complete Guide to Vue.js"**\n  - Co-authored a comprehensive guide on Vue.js development.\n\n---\n\n## Community Involvement\n\n### Open Source Advocacy\n- Actively promotes open-source software and contributions.\n- Mentors new contributors and fosters a welcoming community around Vue.js.\n\n### Community Events\n- Organizes and participates in meetups, hackathons, and community events to engage with developers and gather feedback on Vue.js and other projects.\n\n---\n\n## Personal Interests\n\n### Hobbies\n- **Music:** Plays guitar and enjoys composing music.\n- **Travel:** Enjoys exploring new cultures and destinations.\n- **Art and Design:** Passionate about digital art and interactive design projects.\n\n### Languages\n- **English:** Fluent\n- **Chinese:** Native\n\n---\n\n
+# Evan You
+
+<img src="https://avatars.githubusercontent.com/u/499550" width="100px"/>
+
+## Contact Information
+- **Email:** youyuxi@gmail.com
+- **Twitter:** [@youyuxi](https://twitter.com/youyuxi)
+- **GitHub:** [yyx990803](https://github.com/yyx990803)
+- **Website:** [evanyou.me](https://evanyou.me)
+
+---
+
+## Professional Profile
+Evan You is a renowned software engineer best known for creating Vue.js, a progressive JavaScript framework for building user interfaces. With a keen eye for design and a passion for developer experience, Evan has significantly impacted the frontend development community. He is dedicated to creating tools that are both powerful and easy to use, promoting best practices and innovation in web development.
+
+---
+
+## Career Highlights
+
+### Creator of Vue.js
+- **Organization:** Self-initiated open-source project
+- **Duration:** Feb 2014 – Present
+- **Key Contributions:**
+  - Developed and maintained Vue.js, a widely adopted JavaScript framework.
+  - Grew the Vue.js ecosystem to include official tools like Vue Router, Vuex, and Vue CLI.
+  - Built a strong, supportive community around Vue.js through documentation, tutorials, and community events.
+  - Continually evolved the framework to incorporate modern web development practices and improve performance.
+
+### Independent Open Source Developer
+- **Duration:** Jan 2016 – Present
+- **Key Projects:**
+  - **Vite:** A next-generation frontend tooling, which significantly improves the development experience with rapid hot module replacement (HMR) and optimized build process.
+  - **Vue CLI:** A powerful CLI tool for scaffolding and managing Vue.js projects.
+
+### Senior Frontend Engineer | Meteor Development Group
+- **Duration:** Jan 2015 – Dec 2015
+- **Key Contributions:**
+  - Worked on various core features of the Meteor framework.
+  - Focused on enhancing the frontend development experience.
+  - Collaborated with the open-source community to integrate Vue.js with Meteor.
+
+### Creative Technologist | Google Creative Lab
+- **Duration:** Jun 2013 – Dec 2014
+- **Key Contributions:**
+  - Developed innovative web experiences and prototypes.
+  - Utilized cutting-edge web technologies to create interactive projects.
+  - Collaborated with designers and developers to push the boundaries of web development.
+
+---
+
+## Skills and Expertise
+
+### Technical Skills
+- **JavaScript:** Expert
+- **TypeScript:** Advanced
+- **HTML:** Advanced
+- **CSS:** Advanced
+
+### Frameworks and Libraries
+- **Vue.js:** Creator and Expert
+- **React:** Intermediate
+- **Angular:** Intermediate
+- **Webpack:** Advanced
+- **Rollup:** Advanced
+
+### Tools and Platforms
+- **Vite:** Creator and Expert
+- **Vue CLI:** Expert
+- **Git:** Expert
+- **Jest:** Advanced
+- **Cypress:** Intermediate
+- **Docker:** Intermediate
+
+### Other Competencies
+- **Frontend Architecture:** Expert
+- **Component Design:** Expert
+- **Performance Optimization:** Advanced
+- **Testing:** Advanced
+- **User Experience (UX) Design:** Advanced
+- **Public Speaking:** Expert
+
+---
+
+## Education
+
+### Master of Fine Arts in Design & Technology
+- **Institution:** Parsons School of Design
+- **Graduation Year:** 2013
+
+### Bachelor of Science in Computer Science
+- **Institution:** Shanghai Jiao Tong University
+- **Graduation Year:** 2010
+
+---
+
+## Open Source Contributions
+
+### Vue.js
+- **Repository:** [github.com/vuejs/vue](https://github.com/vuejs/vue)
+- **Description:** Progressive JavaScript framework for building user interfaces.
+- **Key Achievements:**
+  - Over 200,000 GitHub stars.
+  - Widely adopted by developers and companies worldwide.
+  - Extensive ecosystem with robust tooling and plugins.
+
+### Vite
+- **Repository:** [github.com/vitejs/vite](https://github.com/vitejs/vite)
+- **Description:** Next-generation frontend tooling for rapid development.
+- **Key Achievements:**
+  - Significant improvements in development and build performance.
+  - Adoption by many large-scale projects and frameworks.
+
+### Vue CLI
+- **Repository:** [github.com/vuejs/vue-cli](https://github.com/vuejs/vue-cli)
+- **Description:** Standard tooling for Vue.js development.
+- **Key Achievements:**
+  - Simplified project setup and management.
+  - Integrated modern web development best practices.
+
+---
+
+## Speaking Engagements
+
+### Conferences
+- **VueConf:** Regular keynote speaker and session presenter on Vue.js ecosystem and best practices.
+- **JSConf:** Presenter on innovative frontend development techniques and tools.
+- **Frontend Connect:** Speaker on modern JavaScript frameworks and development workflows.
+
+### Workshops and Tutorials
+- Conducts workshops on Vue.js, Vite, and modern frontend development practices.
+- Provides online tutorials and courses to help developers learn Vue.js and related technologies.
+
+---
+
+## Publications
+
+### Articles and Blog Posts
+- **Personal Blog:** [evanyou.me](https://evanyou.me)
+  - Regularly publishes articles on Vue.js, frontend development, and open-source software.
+- **Contributions:** Published articles on prominent platforms like Smashing Magazine and CSS-Tricks.
+
+### Books
+- **"Fullstack Vue: The Complete Guide to Vue.js"**
+  - Co-authored a comprehensive guide on Vue.js development.
+
+---
+
+## Community Involvement
+
+### Open Source Advocacy
+- Actively promotes open-source software and contributions.
+- Mentors new contributors and fosters a welcoming community around Vue.js.
+
+### Community Events
+- Organizes and participates in meetups, hackathons, and community events to engage with developers and gather feedback on Vue.js and other projects.
+
+---
+
+## Personal Interests
+
+### Hobbies
+- **Music:** Plays guitar and enjoys composing music.
+- **Travel:** Enjoys exploring new cultures and destinations.
+- **Art and Design:** Passionate about digital art and interactive design projects.
+
+### Languages
+- **English:** Fluent
+- **Chinese:** Native
+
+---
+
+
 `
