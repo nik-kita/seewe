@@ -1,10 +1,12 @@
 {
   "version": "3.2.0",
   "tasks": {
-    "start": "deno run -A mod.ts"
+    "start": "deno run -A mod.ts",
+    "test": "deno test -A"
   },
   "imports": {
     "@nik-kita/brickyard": "jsr:@nik-kita/brickyard@0.4.3",
+    "@std/assert": "jsr:@std/assert@^1.0.0",
     "@hono/swagger-ui": "npm:@hono/swagger-ui@^0.4.1",
     "@hono/zod-openapi": "npm:@hono/zod-openapi@^0.15.3",
     "@olli/kvdex": "jsr:@olli/kvdex@^1.0.2",
@@ -13,6 +15,7 @@
     "@std/path": "jsr:@std/path@^1.1.5",
     "@wok/djwt": "jsr:@wok/djwt@^3.0.2",
     "hono": "npm:hono@^4.12.25",
+    "xstate": "npm:xstate@^5.22.1",
     "zod": "npm:zod@^3.25.76"
   },
   "fmt": {

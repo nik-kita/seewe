@@ -62,6 +62,9 @@ check:
     npm run type-check
     cd api && deno check mod.ts
 
+test:
+    cd api && deno task test
+
 _dev_api:
     cd api && deno task start
 
