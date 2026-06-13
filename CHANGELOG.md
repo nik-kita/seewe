@@ -8,6 +8,13 @@
   `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
   curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
   (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
+- Add `api/spa_subserver/page_subserver.tsx` (share-link rebrand): the `page`
+  domain's public serving — resolves `/id/:user_id`, `/:username/:name` and
+  `/:username` through the `serving_machine`, redirects to the canonical
+  display-cased URL, serves the uploaded pdf or the rendered markdown, and falls
+  back (redirect to the user's default, a published-pages profile list, or 404)
+  when no page matches. Not mounted yet (the old subserver still serves until
+  cutover).
 - Add `api/spa_subserver/serving_machine.ts` (share-link rebrand): an xstate
   (`npm:xstate@5`) machine encoding the whole public-page serving decision —
   resolve the link, redirect to the canonical display casing when the incoming
