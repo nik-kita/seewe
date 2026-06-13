@@ -8,16 +8,23 @@ relates: [kv-dump-script, kv-restore-migrate]
 ---
 
 Reframe the product: today everything is CV-shaped (`mdcv` records, `/v1/mdcv`,
-"Markdown CV" / "PDF CV"). The pivot makes the core unit a generic **shared page
+"Markdown CV" / "PDF CV"). The pivot makes the core unit a generic **page
 reachable by a link**; a CV becomes one content type.
 
-Decided ([[002.decision]]): **full rebrand**, **API-only** scope (UI rebrand
-deferred, taken as given), gated behind a **KV backup + forward migration**.
+Decided: **full rebrand** ([[002.decision]]), **API-only** scope (UI deferred),
+gated behind a KV backup. New noun = **`page`** ([[004.decision]]):
+`_dev_md_cv`→`_dev_page`, `/v1/mdcv`→`/v1/page`, `MdCvDto`→`PageDto`,
+`mdCv_service`→`page_service`, etc. (full table in 004).
 
-BLOCKED on subtasks (must land before any `mdcv` rename):
-- [[kv-dump-script]] — dump live KV via `ACCESS_TOKEN` (remote connect).
-- [[kv-restore-migrate]] — restore a dump into the new generic schema, mapping
-  old CV records → new page shape.
+ACTIVE — backup gate landed (scripts round-trip; real remote dump = ops step at
+cutover, not a code blocker):
+- [[kv-dump-script]] — data dump + `pre-pivot` schema photo. Done.
+- [[kv-restore-migrate]] — verbatim restore done; `transform_entry` maps
+  `_dev_md_cv`→`_dev_page` (field-for-field, schema preserved).
+
+Next: execute the `mdcv -> page` API rename (DTO, db collections, routers,
+service, public serving), then take the `post-pivot` schema photo and fill the
+transform. Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
 
 Carry-over to preserve in the rename:
 - The render-decision logic in `render_cv` (api/spa_subserver/spa_subserver.tsx)

@@ -21,7 +21,9 @@ DONE — `api/dev/kv_restore.ts`, verbatim restore, validated locally ([[002.log
 - E2E: dump 26 → restore into fresh kv → 26, counts match; guard works.
 
 TODO (deferred, blocked on the new schema in [[pivot-share-link-service]]):
-- Fill `transform_entry` with the old→new field/key mapping once the generic
-  noun + collection shape is decided. `_dev_users` carries as-is; `_dev_md_cv`
-  → new page collection; `_dev_md_cv_pdf` bytes unchanged, re-keyed.
+- Fill `transform_entry` with the old→new mapping. Noun decided = `page`
+  ([[pivot-share-link-service]] 004.decision): `_dev_users` carries as-is,
+  `_dev_md_cv` → `_dev_page`, `_dev_md_cv_pdf` → `_dev_page_pdf` (bytes
+  unchanged, re-keyed). Field-for-field since schema is preserved; the rename
+  changes kvdex key prefixes, so the transform rewrites `entry.key`, not fields.
 - Verify a transformed record still serves via the (new) render machine.
