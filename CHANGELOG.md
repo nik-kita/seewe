@@ -8,6 +8,10 @@
   `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
   curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
   (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
+- Add `api/services/page_service.ts` (share-link rebrand): the `page` equivalent
+  of the CV service, writing `_dev_page` with the new identity model — lowercased
+  routing keys plus raw-case `display_username`/`display_name`. Not wired to
+  routes yet.
 - Begin the share-link rebrand (`mdcv` -> `page`): add `api/dto/page.dto.ts` and
   the `_dev_page` / `_dev_page_pdf` kvdex collections, alongside the existing
   `_dev_md_cv*` (migrated + dropped at cutover). The page record drops the
