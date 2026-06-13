@@ -16,15 +16,17 @@ gated behind a KV backup. New noun = **`page`** ([[004.decision]]):
 `_dev_md_cv`→`_dev_page`, `/v1/mdcv`→`/v1/page`, `MdCvDto`→`PageDto`,
 `mdCv_service`→`page_service`, etc. (full table in 004).
 
-ACTIVE — backup gate landed (scripts round-trip; real remote dump = ops step at
-cutover, not a code blocker):
-- [[kv-dump-script]] — data dump + `pre-pivot` schema photo. Done.
-- [[kv-restore-migrate]] — verbatim restore done; `transform_entry` maps
-  `_dev_md_cv`→`_dev_page` (field-for-field, schema preserved).
+Storage: **keep kvdex** ([[007.decision]], reverses 006). Simplify at the
+DATA-MODEL level — explicit collections/indices/record shape tuned to the real
+queries, dropping CV-era cruft — not by replacing the library. Zod stays.
 
-Next: execute the `mdcv -> page` API rename (DTO, db collections, routers,
-service, public serving), then take the `post-pivot` schema photo and fill the
-transform. Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
+Backup subtasks PAUSED (fully specified; do not resurface until resumed or all
+else done): [[kv-dump-script]] (data dump + pre-pivot schema photo, done),
+[[kv-restore-migrate]] (verbatim restore done; transform deferred).
+
+Next: design the simplified kvdex `page`/`user` schema from the query inventory
+(in [[006.decision]]), then execute the `mdcv -> page` rename. Open sub-decision
+(non-blocking): generalize `kind` beyond md/pdf.
 
 Carry-over to preserve in the rename:
 - The render-decision logic in `render_cv` (api/spa_subserver/spa_subserver.tsx)
