@@ -14,6 +14,11 @@
   the future old→new schema migration. Target via `KV_RESTORE_TARGET` (remote
   url, local path, or default local kv); refuses a non-empty target unless
   `RESTORE_FORCE=1`.
+- Add `api/dev/schema_snapshot.ts`: freezes a committed "photo" of the current
+  stored KV schema (`db.ts` + the stored DTOs) under `api/dev/schema-snapshots/
+  <label>/`, before the share-link rebrand mutates it. Took the `pre-pivot`
+  snapshot. Re-run post-rebrand with a new label and diff to author the restore
+  transform.
 
 ## 2026-06-12
 
