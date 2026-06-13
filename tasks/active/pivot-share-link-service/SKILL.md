@@ -37,9 +37,10 @@ Design decided:
 - Reserved usernames: generated Set (our slugs + Big Username Blacklist + LDNOOBW),
   exact lc match in nik create/update.
 
-Build order in [[012.plan]]. Slice 1 (`page` schema) DONE [[013.log]] —
-`dto/page.dto.ts` + `_dev_page`/`_dev_page_pdf` added, checks clean. CURRENT
-slice: (2) reserved-usernames generator + enforcement.
+Build order in [[012.plan]]. DONE: slice 1 `page` schema [[013.log]]; slice 2
+reserved-usernames guard [[014.log]] (generator + 962-entry set + enforced in
+nik create/update). CURRENT slice: (3) `page_service` — save/update/default/pdf
+with the lc-index + raw-display logic.
 Open sub-decision (non-blocking): generalize `kind` beyond md/pdf. To confirm:
 seewe.deno.dev is on CURRENT Deploy (CDN tags), not Classic.
 
