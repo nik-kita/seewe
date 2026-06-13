@@ -38,11 +38,12 @@ Design decided:
   exact lc match in nik create/update.
 
 Build order in [[012.plan]]. DONE: slice 1 `page` schema [[013.log]]; slice 2
-reserved-usernames guard [[014.log]] (generator + 962-entry set + enforced in
-nik create/update). CURRENT slice: (3) `page_service` — save/update/default/pdf
-with the lc-index + raw-display logic.
-Open sub-decision (non-blocking): generalize `kind` beyond md/pdf. To confirm:
-seewe.deno.dev is on CURRENT Deploy (CDN tags), not Classic.
+reserved-usernames guard [[014.log]]; slice 3 `page_service` [[015.log]]
+(save/default/named/pdf, 12/12 smoke). CURRENT slice: (4) public serving +
+render machine (xstate) + CDN cache tags + canonical display redirect.
+Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
+CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
+cache-tag layer locked, no fallback branch.
 
 Carry-over to preserve in the rename:
 - The render-decision logic in `render_cv` (api/spa_subserver/spa_subserver.tsx)
