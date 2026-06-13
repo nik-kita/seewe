@@ -49,10 +49,12 @@ serving_machine, ServeDecision->Response, not-found nuances; 12/12 integration
 smoke; NOT mounted yet); 4d CDN cache headers `page_cache.ts` [[021.log]]
 (`Deno-CDN-Cache-Control` s-maxage env + `Deno-Cache-Tag` page-/user- on
 artifact/site only; 18 tests). SLICE 4 COMPLETE. Slice 5 invalidate-on-write
-[[022.log]] — purge_page/purge_user wired into all page_service mutations, 22
-tests. CURRENT: slice 6 routers (`/v1/page`, rename mdcv router, wire
-page_service), then 7 cutover (mount page_subserver + post-pivot photo + nik-
-rename page cascade/purge + hand off to paused migration).
+[[022.log]] — purge wired into all page_service mutations; slice 6 routers
+[[023.log]] — `/v1/page` (8 routes) mounted alongside `/v1/mdcv`, +
+page_service.rename/remove (fixed a kvdex array-merge slug-corruption bug). 22
+tests. CURRENT: slice 7 cutover — mount page_subserver (replace spa_subserver),
+nik-rename page cascade + purge_user, post-pivot schema photo, hand off to paused
+[[kv-restore-migrate]].
 Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
 CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
 cache-tag layer locked, no fallback branch.
