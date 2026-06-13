@@ -10,6 +10,7 @@ import { normalize_username } from "../utils/normalize_username.ts"
 import { serve_static } from "../utils/serve_static.ts"
 import { SimpleLayout } from "../utils/SimpleLayout.tsx"
 import { md_to_html } from "../utils/ui/utils/md-to-html.ts"
+import { cache_headers, S_MAXAGE } from "./page_cache.ts"
 import { decide_serve, type ServeDecision } from "./serving_machine.ts"
 
 // Public serving for the `page` domain (rename/rework of spa_subserver). The
@@ -56,21 +57,31 @@ const render_site = (
     </SimpleLayout>,
   )
 
+// stamp the CDN cache headers onto a cacheable page response (served from the
+// global edge until a write purges its page-/user- tag).
+const with_cache = (res: Response, page: PageEntity): Response => {
+  for (const [k, v] of Object.entries(cache_headers(page, S_MAXAGE))) {
+    res.headers.set(k, v)
+  }
+  return res
+}
+
 // Translate the machine's decision into a Response. Returns null for `fallback`
-// so the route can apply its own not-found handling.
-const respond = (
+// so the route can apply its own not-found handling. Only the resolved page
+// content (artifact/site) is CDN-cached; redirects and not-found are not.
+const respond = async (
   ctx: Context,
   decision: ServeDecision,
   opts: { link: string; auto_print: boolean },
-): Response | Promise<Response> | null => {
+): Promise<Response | null> => {
   switch (decision.mode) {
     case "redirect":
       // keep the .pdf variant on the canonical URL too.
       return ctx.redirect(decision.to + (opts.auto_print ? ".pdf" : ""), 307)
     case "artifact":
-      return serve_artifact(decision.pdf, opts.auto_print)
+      return with_cache(serve_artifact(decision.pdf, opts.auto_print), decision.page)
     case "site":
-      return render_site(ctx, decision.page, opts)
+      return with_cache(await render_site(ctx, decision.page, opts), decision.page)
     case "fallback":
       return null
   }

@@ -8,6 +8,12 @@
   `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
   curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
   (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
+- CDN-cache public page responses (share-link rebrand): the `page` subserver
+  stamps resolved page content (rendered markdown or the pdf artifact) with
+  `Deno-CDN-Cache-Control: public, s-maxage=<CACHE_S_MAXAGE, default 1y>` and
+  `Deno-Cache-Tag: page-<id>,user-<id>` so the Deno Deploy edge serves them
+  globally; redirects and not-found responses are left uncached. (Tag-based purge
+  on write comes next.)
 - Add `api/spa_subserver/page_subserver.tsx` (share-link rebrand): the `page`
   domain's public serving — resolves `/id/:user_id`, `/:username/:name` and
   `/:username` through the `serving_machine`, redirects to the canonical
