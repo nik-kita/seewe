@@ -27,3 +27,27 @@ export const cache_headers = (
 
 // effective value resolved once at startup (CACHE_S_MAXAGE, defaulted).
 export const S_MAXAGE = resolve_s_maxage(Deno.env.get("CACHE_S_MAXAGE") ?? undefined)
+
+// --- invalidation on write ----------------------------------------------------
+// Deno Deploy's internal purge endpoint; a tag purge propagates globally within
+// seconds. Only resolves on Deploy, so purges are best-effort: a failure (e.g.
+// local dev, where this host does not exist) must never break a write.
+const PURGE_ENDPOINT = "http://cache.localhost/invalidate/http"
+
+export const purge_tags = async (tags: string[]): Promise<void> => {
+  if (tags.length === 0) return
+  try {
+    await fetch(PURGE_ENDPOINT, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ tags }),
+    })
+  } catch { /* best-effort: Deploy-only, never block a write on it */ }
+}
+
+// invalidate one page's cached responses (content edits, pdf changes, delete).
+export const purge_page = (page_id: number) => purge_tags([`page-${page_id}`])
+
+// invalidate ALL of a user's pages at once (default toggle, nik rename) — one
+// call covers every URL the user answers.
+export const purge_user = (user_id: number) => purge_tags([`user-${user_id}`])

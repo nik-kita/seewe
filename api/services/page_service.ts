@@ -1,6 +1,7 @@
 import { db } from "../db.ts"
 import { Page } from "../dto/page.dto.ts"
 import { UserEntity } from "../dto/user.dto.ts"
+import { purge_page, purge_user } from "../spa_subserver/page_cache.ts"
 import { unique_incremental_timestamp } from "../utils/ui/utils/random.util.ts"
 
 // Service for the `page` domain (rename of md-cv_service). Identity is stored
@@ -65,7 +66,9 @@ const save_as_default = async (input: PageContent, user: UserEntity) => {
       update,
       set: record,
     })
-    return res.ok ? ok(_id) : fail()
+    if (!res.ok) return fail()
+    await purge_user(user._id) // default link changed
+    return ok(_id)
   }
 
   const record: Page = {
@@ -80,7 +83,9 @@ const save_as_default = async (input: PageContent, user: UserEntity) => {
     update,
     set: record,
   })
-  return res.ok ? ok(_id) : fail()
+  if (!res.ok) return fail()
+  await purge_user(user._id) // default link changed
+  return ok(_id)
 }
 
 // Save `input` as a page. A named user creates a NAMED page (needs a name); a
@@ -101,7 +106,9 @@ const save = async (input: PageContent, user: UserEntity) => {
   }
   // primary index on the compound => add fails if [username, name] is taken.
   const res = await db._dev_page.add(record)
-  return res.ok ? ok(_id) : fail()
+  if (!res.ok) return fail()
+  await purge_page(_id)
+  return ok(_id)
 }
 
 // content-only update (md/css/kind/is_published); never touches identity/routing.
@@ -112,7 +119,9 @@ const update = async (_id: number, patch: PageContent) => {
     css: patch.css,
     is_published: patch.is_published,
   }))
-  return res.ok ? ok(null) : fail()
+  if (!res.ok) return fail()
+  await purge_page(_id)
+  return ok(null)
 }
 
 // Make `page_id` the user's default, or remove it as default. Clears the user's
@@ -136,7 +145,9 @@ const toggle_default = async (is_default: boolean, { page_id, user }: {
   if (is_default && user.nik) patch.display_username = user.nik
 
   const res = await db._dev_page.updateByPrimaryIndex("_id", page_id, patch)
-  return res.ok ? ok(null) : fail()
+  if (!res.ok) return fail()
+  await purge_user(user._id) // default link moved (old + new default page)
+  return ok(null)
 }
 
 // store (or replace) the uploaded pdf and flip the page to "pdf" kind.
@@ -158,6 +169,7 @@ const set_pdf = async ({ page_id, bytes, filename }: {
     kind: "pdf",
     pdf_version: uploaded_at,
   })
+  await purge_page(page_id)
   return ok(null)
 }
 
@@ -173,6 +185,7 @@ const remove_pdf = async (page_id: number) => {
     kind: "md",
     pdf_version: undefined,
   })
+  await purge_page(page_id)
   return ok(null)
 }
 

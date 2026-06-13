@@ -8,6 +8,11 @@
   `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
   curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
   (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
+- Invalidate the page CDN cache on write (share-link rebrand): every
+  `page_service` mutation purges the relevant `Deno-Cache-Tag` via Deno Deploy's
+  global purge endpoint — `page-<id>` for content/pdf edits, `user-<id>` for
+  default-link changes — so an edit is reflected globally within seconds. Purges
+  are best-effort and never block or fail a write.
 - CDN-cache public page responses (share-link rebrand): the `page` subserver
   stamps resolved page content (rendered markdown or the pdf artifact) with
   `Deno-CDN-Cache-Control: public, s-maxage=<CACHE_S_MAXAGE, default 1y>` and
