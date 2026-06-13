@@ -43,6 +43,16 @@ export const PageEntityDto = PageDto.omit({ _id: true }).extend({
   _id: z.number(),
 })
 
+// what a caller may send when creating/updating a page. Identity/routing fields
+// are derived server-side from the user + name, never accepted from the client.
+export const PageInputDto = z.object({
+  md: z.string().optional(),
+  css: z.string().optional(),
+  is_published: z.boolean(),
+  // a named page's name (raw display); only meaningful for a user with a nik.
+  name: z.string().optional(),
+})
+
 // the uploaded pdf blob, in its own serialized (v8 + chunked) collection keyed by
 // page id, so the large bytes are never read while reading the page record.
 export const PagePdfDto = z.object({

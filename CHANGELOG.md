@@ -8,6 +8,13 @@
   `api/utils/reserved_usernames.gen.ts` from our `src/pages` route slugs + a
   curated set + The Big Username Blacklist + LDNOOBW), `is_reserved_username`
   (exact, case-insensitive), enforced in `users_service.add_nik`/`update_nik`.
+- Add the `/v1/page` write API (share-link rebrand): the `page` equivalent of
+  `/v1/mdcv` — create / update / delete pages, toggle default, upload/remove pdf
+  — wired to `page_service` (which derives the lowercased routing keys + raw
+  display values). Mounted alongside `/v1/mdcv`, which stays until cutover. Also
+  adds `page_service.rename` (named-page rename keeps the slug in sync) and
+  `remove`. Run `just gen-types` against a running server to surface the new
+  endpoints in the typed client (deferred with the UI rebrand).
 - Invalidate the page CDN cache on write (share-link rebrand): every
   `page_service` mutation purges the relevant `Deno-Cache-Tag` via Deno Deploy's
   global purge endpoint — `page-<id>` for content/pdf edits, `user-<id>` for

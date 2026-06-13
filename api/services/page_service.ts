@@ -1,6 +1,7 @@
 import { db } from "../db.ts"
 import { Page } from "../dto/page.dto.ts"
 import { UserEntity } from "../dto/user.dto.ts"
+import { normalize_username } from "../utils/normalize_username.ts"
 import { purge_page, purge_user } from "../spa_subserver/page_cache.ts"
 import { unique_incremental_timestamp } from "../utils/ui/utils/random.util.ts"
 
@@ -173,6 +174,36 @@ const set_pdf = async ({ page_id, bytes, filename }: {
   return ok(null)
 }
 
+// rename a named page: update the raw display name + the lowercased compound key
+// it is reachable by. Fails if the new [username, name] is already taken.
+const rename = async (page_id: number, user: UserEntity, new_name: string) => {
+  if (!user.nik) return fail()
+  const res = await db._dev_page.updateByPrimaryIndex(
+    "_id",
+    page_id,
+    {
+      display_name: new_name,
+      by_username_and_name: [
+        normalize_username(user.nik),
+        normalize_username(new_name),
+      ],
+    },
+    // kvdex merges arrays by default -> the compound key would be appended, not
+    // replaced; force replace so the slug becomes exactly [username, name].
+    { mergeOptions: { arrays: "replace" } },
+  )
+  if (!res.ok) return fail()
+  await purge_user(user._id) // the named URL moved
+  return ok(null)
+}
+
+const remove = async (page_id: number, user: UserEntity) => {
+  await db._dev_page.deleteByPrimaryIndex("_id", page_id)
+  await db._dev_page_pdf.deleteByPrimaryIndex("page_id", page_id)
+  await purge_user(user._id)
+  return ok(null)
+}
+
 const get_pdf = async (page_id: number) => {
   const res = await db._dev_page_pdf.findByPrimaryIndex("page_id", page_id)
   return res?.value ?? null
@@ -193,6 +224,8 @@ export const page_service = {
   save,
   save_as_default,
   update,
+  rename,
+  remove,
   toggle_default,
   set_pdf,
   get_pdf,

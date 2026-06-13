@@ -4,6 +4,7 @@ import { auth_router } from "./routers/auth/auth_router.ts"
 import { users_router } from "./routers/users/users_router.ts"
 import { content_router } from "./routers/content/content_router.ts"
 import { mdcv_router } from "./routers/mdcv/mdcv_router.ts"
+import { page_router } from "./routers/page/page_router.ts"
 
 const app = new OpenAPIHono()
 
@@ -12,6 +13,7 @@ export const api_v1 = app
   .route("/content", content_router)
   .route("/auth", auth_router)
   .route("/mdcv", mdcv_router)
+  .route("/page", page_router)
   .route("/users", users_router)
   .openapi(
     {
