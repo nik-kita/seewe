@@ -1,6 +1,7 @@
 import { collection, kvdex } from "jsr:@olli/kvdex"
 import { z } from "zod"
 import { MdCvDto, MdCvPdfDto } from "./dto/md-cv.dto.ts"
+import { PageDto, PagePdfDto } from "./dto/page.dto.ts"
 import { UserDto } from "./dto/user.dto.ts"
 
 const kv = await Deno.openKv()
@@ -8,6 +9,15 @@ const MdCvDtoWithPossibilityToUpdateUsernameCvNamePair = MdCvDto.omit({
   as_regulary_by_name_username: true,
 }).merge(z.object({
   as_regulary_by_name_username: z.array(z.string()).optional(),
+}))
+
+// kvdex validates the WHOLE value on update; the compound routing key is a
+// fixed-length tuple, so relax it to a plain optional array for partial updates
+// (e.g. clearing/rewriting it on a nik rename). Mirrors the mdcv handling above.
+const PageDtoForPartialUpdate = PageDto.omit({
+  by_username_and_name: true,
+}).merge(z.object({
+  by_username_and_name: z.array(z.string()).optional(),
 }))
 
 export const db = kvdex(kv, {
@@ -34,6 +44,26 @@ export const db = kvdex(kv, {
     serialize: "v8",
     indices: {
       mdcv_id: "primary",
+    },
+  }),
+  // --- new `page` domain (share-link rebrand). Lives alongside `_dev_md_cv*`
+  // during the build; the old collections are migrated + dropped at cutover. ---
+  _dev_page: collection(PageDtoForPartialUpdate, {
+    indices: {
+      _id: "primary",
+      user_id: "secondary",
+      is_published: "secondary",
+      // direct link lookups (all lowercased): /id/:user_id, /:username,
+      // /:username/:name respectively.
+      default_by_user_id: "primary",
+      default_by_username: "primary",
+      by_username_and_name: "primary",
+    },
+  }),
+  _dev_page_pdf: collection(PagePdfDto, {
+    serialize: "v8",
+    indices: {
+      page_id: "primary",
     },
   }),
 })

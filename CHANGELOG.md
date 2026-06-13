@@ -2,6 +2,13 @@
 
 ## 2026-06-13
 
+- Begin the share-link rebrand (`mdcv` -> `page`): add `api/dto/page.dto.ts` and
+  the `_dev_page` / `_dev_page_pdf` kvdex collections, alongside the existing
+  `_dev_md_cv*` (migrated + dropped at cutover). The page record drops the
+  vestigial `html`, splits identity into raw `display_username`/`display_name`
+  plus lowercased indexed routing keys (`default_by_username`,
+  `by_username_and_name`), and keys the pdf blob by `page_id`. Not served yet.
+
 - Add `api/dev/kv_dump.ts`: dumps the live Deno KV to a local v8-serialized file
   as a backup before the planned share-link rebrand. Connects via env
   (`KV_CONNECT_URL` + `DENO_KV_ACCESS_TOKEN`, or local kv when the url is
