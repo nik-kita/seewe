@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-06-13
+
+- Add `api/dev/kv_dump.ts`: dumps the live Deno KV to a local v8-serialized file
+  as a backup before the planned share-link rebrand. Connects via env
+  (`KV_CONNECT_URL` + `DENO_KV_ACCESS_TOKEN`, or local kv when the url is
+  omitted), dumps at the raw kv level (`kv.list({ prefix: [] })`) so kvdex index
+  entries and chunked `_dev_md_cv_pdf` blobs are captured verbatim, and writes a
+  timestamped file under `api/dev/kv-dumps/` (gitignored — holds real user data).
+- Add `api/dev/kv_restore.ts`: restores a `kv_dump.ts` v8 dump back into KV.
+  Currently a verbatim restore (raw `kv.set` per entry, rebuilding kvdex records,
+  indices and chunked blobs exactly), with a `transform_entry` seam reserved for
+  the future old→new schema migration. Target via `KV_RESTORE_TARGET` (remote
+  url, local path, or default local kv); refuses a non-empty target unless
+  `RESTORE_FORCE=1`.
+
 ## 2026-06-12
 
 - New `/pdf-cv` page (linked from the header next to "Markdown CV"): without
