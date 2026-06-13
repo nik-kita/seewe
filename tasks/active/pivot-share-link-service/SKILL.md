@@ -39,10 +39,13 @@ Design decided:
 
 Build order in [[012.plan]]. DONE: slice 1 `page` schema [[013.log]]; slice 2
 reserved-usernames guard [[014.log]]; slice 3 `page_service` [[015.log]]
-(save/default/named/pdf, 12/12 smoke); slice 4a render machine (xstate) +
-tests [[016.log]] [[017.log]] (4/4, `deno task test`). CURRENT: slice 4 remainder — 4b user nik lc/display split (correctness
-prereq), 4c page_subserver (resolve + canonical redirect + wire decide_render),
-4d CDN cache headers.
+(save/default/named/pdf, 12/12 smoke); 4a render machine [[016.log]] [[017.log]];
+4c MACHINE rebuilt as the page-serving machine `serving_machine.ts` ([[018.log]],
+14 tests) — owns resolve -> canonical display/lc redirect ->
+render(artifact|site|degrade)|fallback, IO injected. CURRENT: 4c handler
+(`page_subserver`: build ServeInput per route + ServeDecision->Response +
+not-found nuances + `.pdf` suffix) + 4d CDN cache headers + 4b user nik
+lc/display split (handler prereq).
 Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
 CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
 cache-tag layer locked, no fallback branch.
