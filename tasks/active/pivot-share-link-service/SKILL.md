@@ -2,7 +2,7 @@
 name: pivot-share-link-service
 description: Pivot seewe from a CV-specific host to a generic share-page-via-link service (API-first, full rename). Load when reworking the mdcv domain, public serving, or the render machine toward generic shareable links.
 created: 2026-06-13
-updated: 2026-06-13
+updated: 2026-06-14
 tags: [product, architecture, pivot]
 relates: [kv-dump-script, kv-restore-migrate]
 ---
@@ -57,12 +57,23 @@ tests. Slice 7 cutover CODE parts done [[024.log]]: mount swapped in mod.ts
 in tree, dead on public path); nik-rename cascade moved off `_dev_md_cv` to
 `page_service.cascade_user_rename` (rebuilds default + named lc keys w/
 arrays:"replace", raw display_username, purge_user). check clean, 22/22 tests,
-10/10 cascade smoke. CURRENT: slice 7 OPS parts remain — (3) post-pivot schema
-photo vs remote KV (ACCESS_TOKEN), (4) hand off to paused [[kv-restore-migrate]]
-for the data move (until it runs, `_dev_page` is empty for existing records).
-Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
-CONFIRMED: the new version deploys on current Deno Deploy (not Classic) -> CDN
-cache-tag layer locked, no fallback branch.
+10/10 cascade smoke.
+
+Slice 7 OPS — data move split into PRODUCE (now) + APPLY (deferred)
+[[025.decision]]. PRODUCE done [[026.log]]: dumped live remote KV (181 entries,
+gitignored), extracted `db.ts` into a `make_db(kv)` factory, added
+`api/dev/kv_transform.ts` (replay dump through kvdex -> write `_dev_page`/
+`_dev_page_pdf` + backfill `nik_lc` -> raw-dump new-schema collections as a
+**fixture**). Produced + verified `kv-fixture.page.<stamp>.v8` (gitignored): 26
+pages, 2 pdfs (blob reassembled), 6/11 users nik_lc'd; all default/named links +
+case-insensitive lookups resolve, 3 legacy orphans preserved. 22/22 tests.
+
+CURRENT: APPLY/restore deferred — `kv_restore.ts` the fixture into remote KV only
+AFTER the rebrand (incl. UI) ships + deploys; until then `_dev_page` is empty in
+prod. The verbatim dump is the old-schema backup; the fixture is the new-schema
+target. Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
+CONFIRMED: deploys on current Deno Deploy (not Classic) -> CDN cache-tag layer
+locked, no fallback branch.
 
 Carry-over to preserve in the rename:
 - The render-decision logic in `render_cv` (api/spa_subserver/spa_subserver.tsx)
@@ -72,5 +83,5 @@ Carry-over to preserve in the rename:
 - Custom md renderer, no library [[seewe-custom-markdown-renderer]]; blobs stay
   in serialized collections, KV 64KiB cap [[seewe-kvdex-write-only-validation-and-kv-limits]].
 
-Next: complete the two subtasks, then unblock and decompose the rename
-(collection/routes/DTO/service rename + render machine + migration apply).
+Next: the UI rebrand (frontend `/v1/mdcv` -> `/v1/page`, "CV" -> "page"
+language), then deploy, then APPLY the fixture (restore into remote KV).
