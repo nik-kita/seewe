@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-06-14
+
+- Add `api/dev/kv_transform.ts` (share-link rebrand data move): turns a verbatim
+  `kv_dump.ts` dump (old `_dev_md_cv*` / pre-`nik_lc` schema) into a NEW-schema
+  **fixture** file — `_dev_users` (with `nik_lc` backfilled) + `_dev_page` +
+  `_dev_page_pdf` — without touching any live KV. It replays the dump into a
+  throwaway local kv and re-writes through the real kvdex schema, so the new
+  indices and the v8-chunked pdf segments are produced exactly as the app would.
+  Routing keys are derived only from the old index markers actually present (not
+  re-derived from `name`), so legacy unindexed same-name records stay
+  link-unreachable instead of colliding on the new compound key. Output lands in
+  `dev/kv-dumps/kv-fixture.page.<stamp>.v8` (gitignored); restored later, after
+  the rebrand ships + deploys, via `kv_restore.ts` (verbatim — the fixture is
+  already the target schema).
+- `api/db.ts`: extract the kvdex schema into a `make_db(kv)` factory (the app
+  still exports the default-kv `db`) so dev tooling can open the exact same
+  collections over a throwaway kv without duplicating the definition.
+
 ## 2026-06-13
 
 - Cutover to the `page` domain: public serving is now `page_subserver` (reads

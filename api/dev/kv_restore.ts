@@ -3,7 +3,9 @@
 // kvdex's exact state (records, indices, chunked `_dev_md_cv_pdf` blob parts).
 //
 // The old -> new schema transformation for the share-link rebrand is NOT done
-// here yet: it plugs into `transform_entry` below, which is currently identity.
+// here: it is a separate OFFLINE step, dev/kv_transform.ts, which turns a verbatim
+// dump into a new-schema `page` fixture file. Restoring such a fixture is verbatim
+// (the bytes are already the target schema), so `transform_entry` stays identity.
 // See task kv-restore-migrate / pivot-share-link-service.
 //
 // Args:
