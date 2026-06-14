@@ -68,20 +68,28 @@ gitignored), extracted `db.ts` into a `make_db(kv)` factory, added
 pages, 2 pdfs (blob reassembled), 6/11 users nik_lc'd; all default/named links +
 case-insensitive lookups resolve, 3 legacy orphans preserved. 22/22 tests.
 
-CURRENT: APPLY/restore deferred — `kv_restore.ts` the fixture into remote KV only
-AFTER the rebrand (incl. UI) ships + deploys; until then `_dev_page` is empty in
-prod. The verbatim dump is the old-schema backup; the fixture is the new-schema
-target. Open sub-decision (non-blocking): generalize `kind` beyond md/pdf.
-CONFIRMED: deploys on current Deno Deploy (not Classic) -> CDN cache-tag layer
-locked, no fallback branch.
+Legacy mdcv backend DROPPED [[027.decision]] [[028.log]]: removed `/v1/mdcv`
+routes, `md-cv_service`, old `spa_subserver.tsx`, `_dev_md_cv*` collections.
+Production is page-only; the old schema survives ONLY in `dev/legacy_md-cv.dto.ts`
++ `kv_transform.ts`'s own `make_legacy_db` (the migration tool). Fixed a real bug:
+`users_service.add_nik` cascades to `_dev_page` now (was writing dead `_dev_md_cv`).
+22/22 tests, transform still 26 pages/2 pdfs.
 
-Carry-over to preserve in the rename:
-- The render-decision logic in `render_cv` (api/spa_subserver/spa_subserver.tsx)
-  — `pdf` → serve artifact; else render md→html in `SimpleLayout` (our site);
-  missing blob → degrade to md. To be re-expressed as an **xstate machine**:
-  resolve → serve_artifact | fallback_to_site (+ degrade edge).
+DIRECTION: the existing `src/` UI is ABANDONED — it will be rebuilt from scratch,
+not rebranded (so it currently 404s on the removed `/v1/mdcv`; expected).
+
+CURRENT: APPLY/restore deferred — `kv_restore.ts` the fixture into remote KV only
+AFTER the new UI ships + deploys; until then `_dev_page` is empty in prod. The
+verbatim dump is the old-schema backup; the fixture is the new-schema target.
+Open sub-decision (non-blocking): generalize `kind` beyond md/pdf. Optional later
+cleanup: raw `nik` index + uncalled `find_by_nik`. CONFIRMED: deploys on current
+Deno Deploy (not Classic) -> CDN cache-tag layer locked, no fallback branch.
+
+Carry-over (render-decision logic from the old `render_cv` — DONE: now the
+`serving_machine` + `page_subserver`; `spa_subserver.tsx` deleted):
 - Custom md renderer, no library [[seewe-custom-markdown-renderer]]; blobs stay
   in serialized collections, KV 64KiB cap [[seewe-kvdex-write-only-validation-and-kv-limits]].
 
-Next: the UI rebrand (frontend `/v1/mdcv` -> `/v1/page`, "CV" -> "page"
-language), then deploy, then APPLY the fixture (restore into remote KV).
+Next: build the new UI from scratch (against `/v1/page`), then deploy, then APPLY
+the fixture (restore into remote KV, coordinated with the deploy so prod links
+don't break in the window).
