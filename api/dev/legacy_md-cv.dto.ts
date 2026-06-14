@@ -1,3 +1,7 @@
+// LEGACY, migration-only. The CV-era `_dev_md_cv*` schema, removed from
+// production (db.ts / services / routers). The ONLY remaining reader is
+// dev/kv_transform.ts, which needs this shape to migrate an old dump into the new
+// `page` fixture. Do not import from app code.
 import { z } from "zod"
 
 export const MdCvDto = z.object({

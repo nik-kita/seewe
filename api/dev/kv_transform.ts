@@ -28,14 +28,36 @@
 //   deno run -A dev/kv_transform.ts [dump-file]
 
 import { deserialize, serialize } from "node:v8"
+import { collection, kvdex } from "jsr:@olli/kvdex"
 import { join } from "@std/path"
 import { make_db } from "../db.ts"
-import { MdCv } from "../dto/md-cv.dto.ts"
+import { MdCv, MdCvDto, MdCvPdfDto } from "./legacy_md-cv.dto.ts"
 import { Page } from "../dto/page.dto.ts"
 import { User } from "../dto/user.dto.ts"
 import { normalize_username as lc } from "../utils/normalize_username.ts"
 
 type DumpEntry = { key: Deno.KvKey; value: unknown; versionstamp: string }
+
+// The OLD CV-era schema lives ONLY here now (removed from production db.ts). A
+// throwaway second kvdex over the same temp kv reads the dumped `_dev_md_cv*`
+// records; the new `page`/`users` collections are read+written via make_db.
+const make_legacy_db = (kv: Deno.Kv) =>
+  kvdex(kv, {
+    _dev_md_cv: collection(MdCvDto, {
+      indices: {
+        _id: "primary",
+        user_id: "secondary",
+        is_published: "secondary",
+        as_default_by_user_id: "primary",
+        as_default_by_username: "primary",
+        as_regulary_by_name_username: "primary",
+      },
+    }),
+    _dev_md_cv_pdf: collection(MdCvPdfDto, {
+      serialize: "v8",
+      indices: { mdcv_id: "primary" },
+    }),
+  })
 
 // collections that make up the new-schema fixture (old `_dev_md_cv*` is dropped).
 const FIXTURE_COLLECTIONS = [
@@ -48,9 +70,12 @@ const newest_dump = async (): Promise<string> => {
   const dir = join(import.meta.dirname ?? ".", "kv-dumps")
   let latest = ""
   for await (const f of Deno.readDir(dir)) {
-    if (f.isFile && f.name.endsWith(".v8") && f.name > latest) latest = f.name
+    // only verbatim dumps (kv-dump.*), never our own kv-fixture.* output.
+    if (f.isFile && f.name.startsWith("kv-dump.") && f.name.endsWith(".v8")) {
+      if (f.name > latest) latest = f.name
+    }
   }
-  if (!latest) throw new Error(`no .v8 dump found in ${dir}`)
+  if (!latest) throw new Error(`no kv-dump.*.v8 found in ${dir}`)
   return join(dir, latest)
 }
 
@@ -105,6 +130,7 @@ const tmp = await Deno.makeTempFile({ suffix: ".kv.sqlite" })
 const kv = await Deno.openKv(tmp)
 for (const e of entries) await kv.set(e.key, e.value)
 const db = make_db(kv)
+const legacy = make_legacy_db(kv)
 
 // --- read old, write new ------------------------------------------------------
 const { result: users } = await db._dev_users.getMany()
@@ -112,7 +138,7 @@ const user_by_id = new Map<number, User>(
   users.map((u) => [u.value._id!, u.value]),
 )
 
-const { result: cvs } = await db._dev_md_cv.getMany()
+const { result: cvs } = await legacy._dev_md_cv.getMany()
 let pages = 0
 for (const c of cvs) {
   const res = await db._dev_page.add(
@@ -122,7 +148,7 @@ for (const c of cvs) {
   pages++
 }
 
-const { result: pdfs } = await db._dev_md_cv_pdf.getMany()
+const { result: pdfs } = await legacy._dev_md_cv_pdf.getMany()
 let pdf_count = 0
 for (const p of pdfs) {
   const v = p.value

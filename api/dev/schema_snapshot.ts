@@ -17,12 +17,12 @@
 import { dirname, join } from "@std/path"
 
 // The files that define the stored kv schema: the kvdex collection/index config
-// and the zod DTOs of every stored collection (_dev_users, _dev_md_cv,
-// _dev_md_cv_pdf). Paths are relative to api/.
+// and the zod DTOs of every stored collection (_dev_users, _dev_page,
+// _dev_page_pdf). Paths are relative to api/.
 const SCHEMA_SOURCES = [
   "db.ts",
   "dto/user.dto.ts",
-  "dto/md-cv.dto.ts",
+  "dto/page.dto.ts",
 ]
 
 const api_root = join(import.meta.dirname ?? ".", "..")
@@ -47,8 +47,8 @@ Taken before / during the share-link rebrand (see task
 pivot-share-link-service) so the old shape can be diffed against the new one to
 author kv_restore.ts's \`transform_entry\`.
 
-Stored collections at snapshot time: \`_dev_users\`, \`_dev_md_cv\`,
-\`_dev_md_cv_pdf\` (blob, serialized v8 + chunked).
+Stored collections at snapshot time: \`_dev_users\`, \`_dev_page\`,
+\`_dev_page_pdf\` (blob, serialized v8 + chunked).
 
 Files (verbatim copies, relative to api/):
 ${copied.map((f) => `- ${f}`).join("\n")}

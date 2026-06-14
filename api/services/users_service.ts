@@ -113,11 +113,10 @@ const add_nik = async (nik: string, user: UserEntity) => {
   })
 
   if (db_res.ok) {
-    // assume it can be only one or zero cv, because without nik user can't have more
-    await db._dev_md_cv.updateBySecondaryIndex("user_id", user._id, {
-      as_default_by_user_id: user._id,
-      as_default_by_username: nik,
-    })
+    // a previously nik-less user can only have the single default page; cascade
+    // the new nik onto it (sets default_by_username + display_username) so
+    // /:username resolves. Mirrors update_nik.
+    await page_service.cascade_user_rename(user, nik)
 
     return {
       ok: true,

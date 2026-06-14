@@ -2,6 +2,18 @@
 
 ## 2026-06-14
 
+- Drop the legacy `mdcv` backend (share-link rebrand cleanup): removed the
+  `/v1/mdcv` routes (`api/routers/mdcv/`), `md-cv_service`, the old
+  `spa_subserver.tsx` public serving, and the `_dev_md_cv*` collections from
+  `db.ts`. The CV-era schema now lives only in `api/dev/legacy_md-cv.dto.ts` for
+  the migration tool, which gained its own legacy kvdex (`kv_transform.ts` is the
+  sole remaining reader of the old shape). Fixed `users_service.add_nik` to
+  cascade a newly added nik onto the user's `_dev_page` default (it was still
+  writing the now-deleted `_dev_md_cv`, so `/:username` would not have resolved
+  for a user who claimed a nik post-cutover), and pointed `schema_snapshot.ts` at
+  the new schema. `kv_transform.ts` now only consumes verbatim `kv-dump.*` files,
+  never its own `kv-fixture.*` output. The current frontend still calls `/v1/mdcv`
+  and is now broken on purpose — it will be rebuilt from scratch, not rebranded.
 - Add `api/dev/kv_transform.ts` (share-link rebrand data move): turns a verbatim
   `kv_dump.ts` dump (old `_dev_md_cv*` / pre-`nik_lc` schema) into a NEW-schema
   **fixture** file — `_dev_users` (with `nik_lc` backfilled) + `_dev_page` +
